@@ -1,3 +1,18 @@
+import subprocess
+import sys
+import os
+
+# ===== INSTALACIÓN FORZADA DE DEPENDENCIAS EN PRODUCCIÓN =====
+# Esto asegura que plotly esté instalado en Streamlit Cloud.
+def instalar_dependencias():
+    try:
+        import plotly
+    except ModuleNotFoundError:
+        subprocess.check_call([sys.executable, "-m", "pip", "install", "plotly", "pandas", "streamlit"])
+        # Luego de instalar, forzamos el reinicio del script para que los imports tomen efecto
+        os.execv(sys.executable, ['python'] + sys.argv)
+
+instalar_dependencias()
 import streamlit as st
 import pandas as pd
 import plotly.express as px
